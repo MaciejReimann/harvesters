@@ -94,6 +94,11 @@ const writeToFile = (fileName, content) => {
     })
 }
 
+const acceptCookies = async (page) => {
+    const acceptCookies = await page.waitForSelector("#didomi-notice-agree-button")
+    acceptCookies.click({ delay: 500 })
+}
+
 
 export const harvest = async () => {
     const timestamp = getTimestamp()
@@ -105,9 +110,8 @@ export const harvest = async () => {
 
         await page.goto(`${entryUrl}&page=1`);
 
-        const acceptCookies = await page.waitForSelector("#didomi-notice-agree-button")
-
-        acceptCookies.click({ delay: 450 })
+        // await new Promise((resolve) => setTimeout(resolve, 1000));
+        // await acceptCookies(page)
 
         const paginationContent = await page.evaluate(() => Array.from(document.querySelectorAll('.in-pagination__item--disabled'), element => element.textContent));
         const lastPageNumber = paginationContent.filter(text => !isNaN(parseInt(text)))
@@ -119,14 +123,11 @@ export const harvest = async () => {
             console.log("Harvester: last page number set to ", lastPage)
         }
 
-        const pageCounterValue = pageCounter.getValue()
 
-        console.log("Harvester: page counter on ", pageCounterValue)
+        console.log("Harvester: page counter on ", pageCounter.getValue())
 
-        while (pageCounterValue <= lastPage) {
-            await new Promise((resolve) => setTimeout(resolve, 500));
-
-            page.goto(`${entryUrl}&pag=${pageCounterValue}`);
+        while (pageCounter.getValue() <= lastPage) {
+            page.goto(`${entryUrl}&pag=${pageCounter.getValue()}`);
 
             await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -138,7 +139,7 @@ export const harvest = async () => {
             console.log("Harvester: harvested links ", links)
 
             for (const link of links) {
-                await new Promise((resolve) => setTimeout(resolve, 1000));
+                await new Promise((resolve) => setTimeout(resolve, 500));
                 const page = await browser.newPage();
 
                 const announcementFeatures = await getAnnouncementFeatures(page, link)
@@ -147,7 +148,11 @@ export const harvest = async () => {
                     features: announcementFeatures
                 }
 
-                console.log(`Harvester: harvested ${links.indexOf(link)} on ${pageCounterValue} out of ${lastPage * links.length}`)
+                const linkCount = links.indexOf(link)
+                const pageCounterValue = pageCounter.getValue()
+                const pagesLeft = lastPage - pageCounterValue
+                console.log(`Harvester: harvested ${linkCount} on ${pageCounterValue}, ${pagesLeft} pages left`)
+
                 writeToFile(fileNameFromTimestamp(timestamp), data)
 
                 await page.close();
