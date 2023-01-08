@@ -1,4 +1,7 @@
 import puppeteer from 'puppeteer';
+import fs from "fs"
+
+const pathToOutputFolder = "./output"
 
 const entryUrl = 'https://www.immobiliare.it/search-list/?fkRegione=sar&idProvincia=SS&idNazione=IT&idContratto=1&idCategoria=1&idTipologia%5B0%5D=7&idTipologia%5B1%5D=11&idTipologia%5B2%5D=12&tipoProprieta=1&giardino%5B0%5D=10&criterio=prezzo&ordine=asc&__lang=it'
 
@@ -17,9 +20,12 @@ const Counter = () => {
 
 const counter = Counter()
 
-const announcements = []
+const announcementLinks = []
+const announcementFeatures = []
 
 export const harvest = async () => {
+    const date = new Date().toLocaleTimeString()
+
     try {
         const browser = await puppeteer.launch({ headless: false, args: ['--start-fullscreen'] });
         const page = await browser.newPage();
@@ -28,8 +34,7 @@ export const harvest = async () => {
 
         const acceptCookies = await page.waitForSelector("#didomi-notice-agree-button")
 
-        acceptCookies.click({ delay: 625 })
-
+        acceptCookies.click({ delay: 450 })
 
         const paginationContent = await page.evaluate(() => Array.from(document.querySelectorAll('.in-pagination__item--disabled'), element => element.textContent));
         const lastPageNumber = paginationContent.filter(text => !isNaN(parseInt(text)))
@@ -44,65 +49,72 @@ export const harvest = async () => {
 
         console.log("Harvester: counter value to ", counter.getValue())
 
+
         while (counter.getValue() <= lastPage) {
-            await new Promise((resolve) => setTimeout(resolve, 1000));
+            await new Promise((resolve) => setTimeout(resolve, 500));
 
             page.goto(`${entryUrl}&pag=${counter.getValue()}`);
 
-            await new Promise((resolve) => setTimeout(resolve, 2000));
+            await new Promise((resolve) => setTimeout(resolve, 1000));
 
             await page.waitForSelector('.in-card__title')
 
             const hrefs = await page.evaluate(() => Array.from(document.querySelectorAll('.in-card__title'), element => element.href));
 
-            announcements.push(...hrefs)
+            announcementLinks.push(...hrefs)
 
-            console.log("Harvester: announcements ", announcements)
-
-
-            await page.screenshot({ path: `example-${counter.getValue()}.png` });
+            console.log("Harvester: announcementLinks ", announcementLinks)
 
             counter.increment()
         }
 
-        announcements.splice(2)
-        announcements.forEach(async (href) => {
+        announcementLinks.splice(2)
+        announcementLinks.forEach(async (href) => {
+
             const page = await browser.newPage();
 
             await new Promise((resolve) => setTimeout(resolve, 2000));
 
             await page.goto(href);
 
-            const featuresTable = await page.waitForSelector(".im-features__list")
-            const featuresTableElement = await page.evaluate(() => document.querySelector('.im-features__list'));
+            await page.waitForSelector(".im-features__list")
 
-            console.log("featuresTableElement", featuresTableElement)
+            const featuresTable = await page.evaluate(() => {
+                const labels = Array.from(document.querySelectorAll('.im-features__title'), el => el.textContent)
+                const values = Array.from(document.querySelectorAll('.im-features__value'), el => el.textContent.trim());
 
-            // await browser.close();
+                if (Array.isArray(labels) && Array.isArray(values)) {
+                    if (labels.length === values.length) {
+                        return labels.map((label, index) => ({ label, value: values[index] }))
+                    }
+                }
+            });
+
+            const announcementPath = href.split("/")
+            const announcementId = announcementPath[announcementPath.length - 2]
+
+            const announcement = {
+                date,
+                announcementId,
+                href,
+                features: featuresTable
+            }
+
+            console.log("announcement", announcement)
+
+            announcementFeatures.push(announcement)
+
+            // await page.close();
 
         })
-        // const inputHandler = await page.waitForSelector('input[class="nd-autocomplete__input"]', {
-        //     waitUntil: "networkidle2"
-        // })
 
-        // await inputHandler.focus()
+        console.log("announcementFeatures", announcementFeatures)
 
-        // await page.keyboard.type('sassari pro')
-        // await new Promise((resolve) => setTimeout(resolve, 1000));
-
-        // // await page.keyboard.press("ArrowDown")
-        // // await new Promise((resolve) => setTimeout(resolve, 500));
-
-        // await page.keyboard.press("Enter")
-
-
-        // await searchButton.click()
-
-
+        fs.writeFileSync(`./output.json`, JSON.stringify(announcementFeatures));
 
         // await browser.close();
 
-        return []
+        return {}
 
     } catch (error) {
         console.log(`Error harvesting`, error)
