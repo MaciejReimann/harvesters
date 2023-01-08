@@ -1,8 +1,6 @@
 import puppeteer from 'puppeteer';
 import fs from "fs"
 
-const pathToOutputFolder = "./output"
-
 const entryUrl = 'https://www.immobiliare.it/search-list/?fkRegione=sar&idProvincia=SS&idNazione=IT&idContratto=1&idCategoria=1&idTipologia%5B0%5D=7&idTipologia%5B1%5D=11&idTipologia%5B2%5D=12&tipoProprieta=1&giardino%5B0%5D=10&criterio=prezzo&ordine=asc&__lang=it'
 
 let lastPage
@@ -24,7 +22,10 @@ const announcementLinks = []
 const announcementFeatures = []
 
 export const harvest = async () => {
-    const date = new Date().toLocaleTimeString()
+    const date = new Date().toLocaleDateString()
+    const time = new Date().toLocaleTimeString()
+    const timestamp = date + " " + time
+    console.log("Harvester fired at: ", timestamp)
 
     try {
         const browser = await puppeteer.launch({ headless: false, args: ['--start-fullscreen'] });
@@ -44,7 +45,6 @@ export const harvest = async () => {
         } else {
             lastPage = lastPageNumber[0]
             console.log("Harvester: last page number set to ", lastPage)
-            lastPage = 1
         }
 
         console.log("Harvester: counter value to ", counter.getValue())
@@ -70,11 +70,11 @@ export const harvest = async () => {
 
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
-        announcementLinks.forEach(async (href) => {
+        for (const link of announcementLinks) {
             await new Promise((resolve) => setTimeout(resolve, 1000));
 
             const page = await browser.newPage();
-            await page.goto(href);
+            await page.goto(link);
 
             await page.waitForSelector(".im-features__list")
 
@@ -89,31 +89,27 @@ export const harvest = async () => {
                 }
             });
 
-            const announcementPath = href.split("/")
-            const announcementId = announcementPath[announcementPath.length - 2]
-
             const announcement = {
-                date,
-                announcementId,
-                href,
+                link,
                 features: featuresTable
             }
 
             announcementFeatures.push(announcement)
 
-            fs.writeFile(`./output.json`, JSON.stringify(announcementFeatures), (err) => {
-                if (err)
-                    console.log(err);
-                else {
-                    console.log("File written successfully\n");
-                }
-            });
+            await page.close();
+        }
 
-            // await page.close();
+        console.log("announcementFeatures", announcementFeatures)
 
-        })
+        fs.writeFile(`./${timestamp}.json`, JSON.stringify(announcementFeatures), (err) => {
+            if (err)
+                console.log(err);
+            else {
+                console.log("File written successfully\n");
+            }
+        });
 
-        // await browser.close();
+        await browser.close();
 
         return {}
 
