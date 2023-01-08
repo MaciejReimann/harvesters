@@ -68,13 +68,12 @@ export const harvest = async () => {
             counter.increment()
         }
 
-        announcementLinks.splice(2)
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
         announcementLinks.forEach(async (href) => {
+            await new Promise((resolve) => setTimeout(resolve, 1000));
 
             const page = await browser.newPage();
-
-            await new Promise((resolve) => setTimeout(resolve, 2000));
-
             await page.goto(href);
 
             await page.waitForSelector(".im-features__list")
@@ -100,17 +99,19 @@ export const harvest = async () => {
                 features: featuresTable
             }
 
-            console.log("announcement", announcement)
-
             announcementFeatures.push(announcement)
+
+            fs.writeFile(`./output.json`, JSON.stringify(announcementFeatures), (err) => {
+                if (err)
+                    console.log(err);
+                else {
+                    console.log("File written successfully\n");
+                }
+            });
 
             // await page.close();
 
         })
-
-        console.log("announcementFeatures", announcementFeatures)
-
-        fs.writeFileSync(`./output.json`, JSON.stringify(announcementFeatures));
 
         // await browser.close();
 
