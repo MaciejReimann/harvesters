@@ -16,19 +16,91 @@ const Counter = () => {
     }
 }
 
-const counter = Counter()
+const pageCounter = Counter()
 
-const announcementLinks = []
-const announcementFeatures = []
-
-export const harvest = async () => {
+const getTimestamp = () => {
     const date = new Date().toLocaleDateString()
     const time = new Date().toLocaleTimeString()
     const timestamp = date + " " + time
+
+    return timestamp
+}
+
+const fileNameFromTimestamp = (timestamp) => {
+    const fileName = timestamp.replaceAll("/", "-").replaceAll(":", "-").replaceAll(" ", "_")
+    console.log("fileName", fileName)
+    return `${fileName}.json`
+}
+
+const getAnnouncementFeatures = async (page, link) => {
+    await page.goto(link);
+    await page.waitForSelector(".im-features__list")
+
+    const announcementFeatures = await page.evaluate(() => {
+        const labels = Array.from(document.querySelectorAll('.im-features__title'), el => el.textContent)
+        const values = Array.from(document.querySelectorAll('.im-features__value'), el => el.textContent.trim());
+
+        if (Array.isArray(labels) && Array.isArray(values)) {
+            if (labels.length === values.length) {
+                return labels.map((label, index) => ({ label, value: values[index] }))
+            }
+        }
+    });
+
+    return announcementFeatures
+}
+
+const writeToFile = (fileName, content) => {
+    console.log("Harvester: writing to file ", fileName)
+
+    const currentPath = process.cwd();
+    const directoryPath = `${currentPath}/output`
+    const filePath = `${directoryPath}/${fileName}`
+
+    fs.readFile(filePath, (error, data) => {
+        if (error) {
+            console.log(`Error reading file ${filePath}`);
+        }
+
+        // console.log("Harvester: writing content ", content)
+
+        if (!data) {
+            fs.mkdir(directoryPath, (error) => {
+                if (error) {
+                    console.log("error creating directory", directoryPath)
+                }
+            })
+
+            fs.writeFile(filePath, JSON.stringify([]), (error) => {
+                if (error)
+                    console.log(error);
+                else {
+                    console.log("File written successfully\n");
+                }
+            });
+        } else {
+            const jsonArray = JSON.parse(data)
+            jsonArray.push(content)
+
+            fs.writeFile(filePath, JSON.stringify(jsonArray), (error) => {
+                if (error)
+                    console.log(error);
+                else {
+                    console.log("File written successfully\n");
+                }
+            });
+
+        }
+    })
+}
+
+
+export const harvest = async () => {
+    const timestamp = getTimestamp()
     console.log("Harvester fired at: ", timestamp)
 
     try {
-        const browser = await puppeteer.launch({ headless: false, args: ['--start-fullscreen'] });
+        const browser = await puppeteer.launch({ headless: false });
         const page = await browser.newPage();
 
         await page.goto(`${entryUrl}&page=1`);
@@ -47,73 +119,50 @@ export const harvest = async () => {
             console.log("Harvester: last page number set to ", lastPage)
         }
 
-        console.log("Harvester: counter value to ", counter.getValue())
+        const pageCounterValue = pageCounter.getValue()
 
+        console.log("Harvester: page counter on ", pageCounterValue)
 
-        while (counter.getValue() <= lastPage) {
+        while (pageCounterValue <= lastPage) {
             await new Promise((resolve) => setTimeout(resolve, 500));
 
-            page.goto(`${entryUrl}&pag=${counter.getValue()}`);
+            page.goto(`${entryUrl}&pag=${pageCounterValue}`);
 
             await new Promise((resolve) => setTimeout(resolve, 1000));
 
             await page.waitForSelector('.in-card__title')
 
             const hrefs = await page.evaluate(() => Array.from(document.querySelectorAll('.in-card__title'), element => element.href));
+            const links = [...hrefs.filter(Boolean)]
 
-            announcementLinks.push(...hrefs)
+            console.log("Harvester: harvested links ", links)
 
-            console.log("Harvester: announcementLinks ", announcementLinks)
+            for (const link of links) {
+                await new Promise((resolve) => setTimeout(resolve, 1000));
+                const page = await browser.newPage();
 
-            counter.increment()
-        }
-
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-
-        for (const link of announcementLinks) {
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-
-            const page = await browser.newPage();
-            await page.goto(link);
-
-            await page.waitForSelector(".im-features__list")
-
-            const featuresTable = await page.evaluate(() => {
-                const labels = Array.from(document.querySelectorAll('.im-features__title'), el => el.textContent)
-                const values = Array.from(document.querySelectorAll('.im-features__value'), el => el.textContent.trim());
-
-                if (Array.isArray(labels) && Array.isArray(values)) {
-                    if (labels.length === values.length) {
-                        return labels.map((label, index) => ({ label, value: values[index] }))
-                    }
+                const announcementFeatures = await getAnnouncementFeatures(page, link)
+                const data = {
+                    link,
+                    features: announcementFeatures
                 }
-            });
 
-            const announcement = {
-                link,
-                features: featuresTable
+                console.log(`Harvester: harvested ${links.indexOf(link)} on ${pageCounterValue} out of ${lastPage * links.length}`)
+                writeToFile(fileNameFromTimestamp(timestamp), data)
+
+                await page.close();
             }
 
-            announcementFeatures.push(announcement)
-
-            await page.close();
+            pageCounter.increment()
         }
-
-        console.log("announcementFeatures", announcementFeatures)
-
-        fs.writeFile(`./${timestamp}.json`, JSON.stringify(announcementFeatures), (err) => {
-            if (err)
-                console.log(err);
-            else {
-                console.log("File written successfully\n");
-            }
-        });
 
         await browser.close();
 
         return {}
-
     } catch (error) {
         console.log(`Error harvesting`, error)
     }
 }
+
+
+
