@@ -1,0 +1,207 @@
+[
+  {
+    "name": "afUserId",
+    "value": "b5fa3356-5ad4-4e68-94d0-60f862217f2d-p",
+    "domain": ".idealista.it",
+    "path": "/",
+    "expires": 1707586423.620919,
+    "httpOnly": false,
+    "secure": false
+  },
+  {
+    "name": "_hjSessionUser_250322",
+    "value": "eyJpZCI6ImQzODNmY2I1LWI1YjItNTE5MC05NjI2LWE1YWUzNjVjNzU5ZiIsImNyZWF0ZWQiOjE2NTc0NjE1MDYwNTksImV4aXN0aW5nIjp0cnVlfQ==",
+    "domain": ".idealista.it",
+    "path": "/",
+    "expires": 1704718548,
+    "httpOnly": false,
+    "secure": true,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "atuserid",
+    "value": "%7B%22name%22%3A%22atuserid%22%2C%22val%22%3A%226d2544b2-57f8-49bc-9b2b-972a63cf02c0%22%2C%22options%22%3A%7B%22end%22%3A%222023-08-17T11%3A36%3A12.669Z%22%2C%22path%22%3A%22%2F%22%7D%7D",
+    "domain": "www.idealista.it",
+    "path": "/",
+    "expires": 1692272172,
+    "httpOnly": false,
+    "secure": false
+  },
+  {
+    "name": "smc",
+    "value": "\"{}\"",
+    "domain": "www.idealista.it",
+    "path": "/",
+    "expires": 1689507404.201558,
+    "httpOnly": false,
+    "secure": true
+  },
+  {
+    "name": "atidvisitor",
+    "value": "%7B%22name%22%3A%22atidvisitor%22%2C%22val%22%3A%7B%22vrn%22%3A%22-582070--607461-%22%2C%22at%22%3A%22IT0085405282%22%2C%22ac%22%3A%221%22%7D%2C%22options%22%3A%7B%22path%22%3A%22%2F%22%2C%22session%22%3A15724800%2C%22end%22%3A15724800%7D%7D",
+    "domain": "www.idealista.it",
+    "path": "/",
+    "expires": 1688907346.97437,
+    "httpOnly": false,
+    "secure": false
+  },
+  {
+    "name": "_gcl_au",
+    "value": "1.1.770903735.1665570623",
+    "domain": ".idealista.it",
+    "path": "/",
+    "expires": 1673346622,
+    "httpOnly": false,
+    "secure": false
+  },
+  {
+    "name": "uc",
+    "value": "\"zAzw8prJeXxdyNfM7jJJ3KRU6BmpsHR73XC6COuR81UkUqIL50aAgOEAgkf+WKQDjAyIikbQhdFImmbBfB+jxB9r6XfwWZb5KLtsMxUOonLG0uDNEfZK5YKD3RktzSL3drsovIQn6N8=\"",
+    "domain": "www.idealista.it",
+    "path": "/",
+    "expires": 1701020963.67837,
+    "httpOnly": true,
+    "secure": true
+  },
+  {
+    "name": "nl",
+    "value": "zAzw8prJeXxdyNfM7jJJ3KRU6BmpsHR73XC6COuR81UkUqIL50aAgOEAgkf+WKQDjAyIikbQhdFImmbBfB+jxB9r6XfwWZb5KLtsMxUOonLG0uDNEfZK5WJnaK4RtWi2",
+    "domain": "www.idealista.it",
+    "path": "/",
+    "expires": 1701020963.678594,
+    "httpOnly": true,
+    "secure": true
+  },
+  {
+    "name": "cc",
+    "value": "eyJhbGciOiJIUzI1NiJ9.eyJjdCI6ODY2NjY1NywiZXhwIjoxNjY5NTcxMzY2fQ.dH8E2ajoV_fUP171tl8HXinb9drMtOYw6UkGsPab-OE",
+    "domain": "www.idealista.it",
+    "path": "/",
+    "expires": 1701020966.257797,
+    "httpOnly": false,
+    "secure": true
+  },
+  {
+    "name": "atreman",
+    "value": "%7B%22name%22%3A%22atreman%22%2C%22val%22%3A%7B%22camp%22%3A%22CS2-1267-%5Bcriteo%5D-%5B144901%5D-%5Bfakt.pl%5D-%5B7097255%5D%22%2C%22date%22%3A464698.8768888889%7D%2C%22options%22%3A%7B%22path%22%3A%22%2F%22%2C%22session%22%3A2592000%2C%22end%22%3A2592000%7D%7D",
+    "domain": "www.idealista.it",
+    "path": "/",
+    "expires": 1675774546.97259,
+    "httpOnly": false,
+    "secure": false
+  },
+  {
+    "name": "AF_SYNC",
+    "value": "1673026423498",
+    "domain": ".idealista.it",
+    "path": "/",
+    "expires": 1673631223,
+    "httpOnly": false,
+    "secure": false
+  },
+  {
+    "name": "cookieSearch-1",
+    "value": "\"/vendita-case/anela-sassari/:1673026448195\"",
+    "domain": "www.idealista.it",
+    "path": "/",
+    "expires": 1704562448.404025,
+    "httpOnly": false,
+    "secure": true
+  },
+  {
+    "name": "ABTasty",
+    "value": "uid=gbbx0yrdf11670kv&fst=1657450486886&pst=1672915901692&cst=1673026421227&ns=29&pvt=901&pvis=54&th=",
+    "domain": ".idealista.it",
+    "path": "/",
+    "expires": 1690999508,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "userUUID",
+    "value": "e81242f2-23da-461b-aba1-bbe2e024bf5b",
+    "domain": "www.idealista.it",
+    "path": "/",
+    "expires": -1,
+    "httpOnly": true,
+    "secure": true
+  },
+  {
+    "name": "_hjCachedUserAttributes",
+    "value": "eyJhdHRyaWJ1dGVzIjp7ImlkX3BhZ2VMYW5ndWFnZSI6Iml0IiwiaWRfdXNlclJvbGUiOiIifSwidXNlcklkIjpudWxsfQ==",
+    "domain": "www.idealista.it",
+    "path": "/",
+    "expires": -1,
+    "httpOnly": false,
+    "secure": true,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "SESSION",
+    "value": "b24321b1b9b69763~49e97d98-9274-4643-97ee-87d212d3b604",
+    "domain": "www.idealista.it",
+    "path": "/",
+    "expires": -1,
+    "httpOnly": true,
+    "secure": true
+  },
+  {
+    "name": "_hjIncludedInSessionSample",
+    "value": "1",
+    "domain": "www.idealista.it",
+    "path": "/",
+    "expires": 1673183043,
+    "httpOnly": false,
+    "secure": true,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "_hjSession_250322",
+    "value": "eyJpZCI6Ijg0NjRjMWFiLTJjYmItNDYyZC1iZDhmLTc3MDQ1NzZmZTBjNyIsImNyZWF0ZWQiOjE2NzMxODI1Mzk2OTgsImluU2FtcGxlIjp0cnVlfQ==",
+    "domain": ".idealista.it",
+    "path": "/",
+    "expires": 1673184379,
+    "httpOnly": false,
+    "secure": true,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "_hjAbsoluteSessionInProgress",
+    "value": "0",
+    "domain": ".idealista.it",
+    "path": "/",
+    "expires": 1673184379,
+    "httpOnly": false,
+    "secure": true,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "utag_main",
+    "value": "v_id:0181e7bf4e2c0011ee10e998640805075005e06d00838$_sn:37$_se:6$_ss:0$_st:1673184346427$dc_visit:11$ses_id:1673182537211%3Bexp-session$_pn:6%3Bexp-session$_prevVtSource:directTraffic%3Bexp-1673186137599$_prevVtCampaignCode:%3Bexp-1673186137599$_prevVtDomainReferrer:idealista.it%3Bexp-1673186137599$_prevVtSubdomaninReferrer:www.idealista.it%3Bexp-1673186137599$_prevVtUrlReferrer:https%3A%2F%2Fwww.idealista.it%2F%3Bexp-1673186137599$_prevVtCampaignLinkName:%3Bexp-1673186137599$_prevVtCampaignName:%3Bexp-1673186137599$_prevVtRecommendationId:%3Bexp-1673186137599$_prevCompletePageName:10%3A%3A%3A%3A%3A%3A%3A%3AviewHome%3Bexp-1673186146874$_prevLevel2:10%3Bexp-1673186146874$_prevCompleteClickName:",
+    "domain": ".idealista.it",
+    "path": "/",
+    "expires": 1704718546,
+    "httpOnly": false,
+    "secure": false
+  },
+  {
+    "name": "cto_bundle",
+    "value": "47amcF9BaW5pM2h3RFM2ejlzSTdYZmxQOHo1WWolMkZoVktNejRESjdOWjlObTdabmpJV0gxUG1mRDcxcWY3Y2JGNUxEZk1sODFLbnNVMiUyRlRGWHhOUkVqREZLWUh4SkpHZTZnckY5OFd6dHZURGo0OTJRJTJGRUl0MHRDTHcyRjdFVkROcm9yYUhxNVIweVUlMkZrc3lvenVPQlVPVG44T2NOSXJ5WDFpemdIb1BPaWs5QnJYVTI2czhZJTJCTCUyRjBXbTFvNVdWTUMlMkZ1dlNRa1N5YUZWOHdxbk0lMkJ0TWhJRVJhdyUzRCUzRA",
+    "domain": ".idealista.it",
+    "path": "/",
+    "expires": 1707346548,
+    "httpOnly": false,
+    "secure": false
+  },
+  {
+    "name": "datadome",
+    "value": "3eNjIV32inmQDs96bB~7seMT-nKdgEO~dzy-WMSALmgk4-rn0hFSZcvXeRIDL3QVqYuTBQMjbwL328JE473vd6RodcwRyBRggRveKC4OCuYtux~3FF-ODElmhB_LFVO~",
+    "domain": ".idealista.it",
+    "path": "/",
+    "expires": 1704718559.36004,
+    "httpOnly": false,
+    "secure": true,
+    "sameSite": "Lax"
+  }
+]
