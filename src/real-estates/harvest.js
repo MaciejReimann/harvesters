@@ -1,5 +1,7 @@
 import puppeteer from 'puppeteer';
-import fs from "fs"
+
+
+import { writeToFile } from "../_shared/write-to-file.js"
 
 const entryUrl = 'https://www.immobiliare.it/search-list/?fkRegione=sar&idProvincia=SS&idNazione=IT&idContratto=1&idCategoria=1&idTipologia%5B0%5D=7&idTipologia%5B1%5D=11&idTipologia%5B2%5D=12&tipoProprieta=1&giardino%5B0%5D=10&criterio=prezzo&ordine=asc&__lang=it'
 
@@ -50,50 +52,7 @@ const getAnnouncementFeatures = async (page, link) => {
     return announcementFeatures
 }
 
-const writeToFile = (fileName, content) => {
-    console.log("Harvester: writing to file ", fileName)
 
-    const currentPath = process.cwd();
-    const directoryPath = `${currentPath}/output`
-    const filePath = `${directoryPath}/${fileName}`
-
-    fs.readFile(filePath, (error, data) => {
-        if (error) {
-            console.log(`Error reading file ${filePath}`);
-        }
-
-        // console.log("Harvester: writing content ", content)
-
-        if (!data) {
-            fs.mkdir(directoryPath, (error) => {
-                if (error) {
-                    console.log("Error creating directory:", directoryPath)
-                    console.log(error)
-                }
-            })
-
-            fs.writeFile(filePath, JSON.stringify([]), (error) => {
-                if (error)
-                    console.log(error);
-                else {
-                    console.log("File written successfully\n");
-                }
-            });
-        } else {
-            const jsonArray = JSON.parse(data)
-            jsonArray.push(content)
-
-            fs.writeFile(filePath, JSON.stringify(jsonArray), (error) => {
-                if (error)
-                    console.log(error);
-                else {
-                    console.log("File written successfully\n");
-                }
-            });
-
-        }
-    })
-}
 
 const acceptCookies = async (page) => {
     const acceptCookies = await page.waitForSelector("#didomi-notice-agree-button")

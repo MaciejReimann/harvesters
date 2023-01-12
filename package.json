@@ -4,6 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
+    "sanitize": "node --experimental-json-modules ./src/ml-experiments/sanitize.js",
     "start": "node src/index.js",
     "test": "test"
   },
