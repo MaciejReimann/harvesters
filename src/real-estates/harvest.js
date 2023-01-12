@@ -19,11 +19,11 @@ const Counter = () => {
 const pageCounter = Counter()
 
 const getTimestamp = () => {
-    const date = new Date().toLocaleDateString()
-    const time = new Date().toLocaleTimeString()
-    const timestamp = date + " " + time
+    // const date = new Date().toISOString()
+    // const time = new Date().toLocaleTimeString()
+    // const timestamp = date + " " + time
 
-    return timestamp
+    return new Date().toISOString()
 }
 
 const fileNameFromTimestamp = (timestamp) => {
@@ -67,7 +67,8 @@ const writeToFile = (fileName, content) => {
         if (!data) {
             fs.mkdir(directoryPath, (error) => {
                 if (error) {
-                    console.log("error creating directory", directoryPath)
+                    console.log("Error creating directory:", directoryPath)
+                    console.log(error)
                 }
             })
 
@@ -105,10 +106,10 @@ export const harvest = async () => {
     console.log("Harvester fired at: ", timestamp)
 
     try {
-        const browser = await puppeteer.launch({ headless: false });
+        const browser = await puppeteer.launch({ headless: true });
         const page = await browser.newPage();
 
-        await page.goto(`${entryUrl}&page=1`);
+        await page.goto(`${entryUrl}&pag=1`);
 
         // await new Promise((resolve) => setTimeout(resolve, 1000));
         // await acceptCookies(page)
@@ -129,7 +130,7 @@ export const harvest = async () => {
         while (pageCounter.getValue() <= lastPage) {
             page.goto(`${entryUrl}&pag=${pageCounter.getValue()}`);
 
-            await new Promise((resolve) => setTimeout(resolve, 1000));
+            await new Promise((resolve) => setTimeout(resolve, 2000));
 
             await page.waitForSelector('.in-card__title')
 
